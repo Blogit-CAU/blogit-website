@@ -1,7 +1,7 @@
-//my post - DB에서 가져오기
+//my post component
 
-//임시 데이터
-export const myPosts = [
+//임시 데이터 - DB에서 가져오기
+const myPosts = [
     {
         title: 'mypost1',
         content:'this is my post1',
@@ -19,3 +19,13 @@ export const myPosts = [
         content:'this is my post4',
     },
 ]
+
+export default function MyPostList(){
+    return (
+        <ul>
+            {myPosts.map((each) => {
+                return <li>{each.title}</li>
+            })}
+        </ul>
+    )
+}
