@@ -12,16 +12,14 @@ const TextItem = dynamic(() => import('react-quill'), {
 
 export default function TextEditor(){
 
-    const [ text, setText ] = useState('');
+    const [ text, setText ] = useState(localStorage.getItem('TEXT_KEY')||'입력없음');
     
     return (
-        <div>
-            <TextItem 
-            theme="snow"
-            value={text}
-            onChange={ setText }
-            />
-            {text}
-        </div>
+        <TextItem 
+        theme="snow"
+        value={text}
+        onChange={ setText }
+        style={{height:'500px'}}
+        />
     )
 };
