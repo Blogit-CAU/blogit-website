@@ -1,23 +1,25 @@
-import React from 'react';
 import { RepositoryList } from '@/components/RepositoryList';
+import { Pagination } from '@/components/Pagination';
 
 export default async function PostPage({
-    searchParams
+  searchParams,
 }: {
-    searchParams?: { [key: string]: string | string[] | undefined }
+  searchParams: {
+    githubId?: string;
+    page?: string;
+  };
 }) {
-  const { githubId } = searchParams as { [key: string]: string };
-
   return (
     <>
       <div className='w-full flex'>
         <div className='w-1/2 ml-7'>
-            <h2>{`${githubId}님의 Commit`}</h2>
-            <RepositoryList githubId={githubId || ''} />
+          <h2>{`${searchParams.githubId}님의 Commit`}</h2>
+          <RepositoryList
+            githubId={searchParams.githubId || ''}
+            page={Number(searchParams.page) || 1}
+          />
         </div>
-        <div className='w-1/2 mr-7'>
-
-        </div>
+        <div className='w-1/2 mr-7'></div>
       </div>
     </>
   );

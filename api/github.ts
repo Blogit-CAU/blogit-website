@@ -2,7 +2,7 @@
 
 import { Octokit } from 'octokit';
 
-const octokit = new Octokit();
+const octokit = new Octokit({});
 
 export async function getCommitList(
   userId: string,
