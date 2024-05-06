@@ -33,43 +33,41 @@ export const Pagination = ({
   };
 
   return (
-    <nav>
-      <ul className={classNames(className, 'flex flew-row gap-2')}>
-        <li>
+    <ul className={classNames(className, 'flex flew-row gap-2')}>
+      <li>
+        <Button
+          size='None'
+          className='w-16 h-10'
+          backgroundColor='#74AA9C'
+          onClick={() => onPageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+        >
+          이전
+        </Button>
+      </li>
+      {pages.map((page) => (
+        <li key={page} className={currentPage === page ? 'active' : ''}>
           <Button
             size='None'
-            className='w-16 h-10'
-            backgroundColor='#74AA9C'
-            onClick={() => onPageChange(currentPage - 1)}
-            disabled={currentPage === 1}
+            className='w-10 h-10'
+            backgroundColor={currentPage === page ? '#88a788' : '#FFFFFF'}
+            onClick={() => onPageChange(page)}
           >
-            이전
+            {page}
           </Button>
         </li>
-        {pages.map((page) => (
-          <li key={page} className={currentPage === page ? 'active' : ''}>
-            <Button
-              size='None'
-              className='w-10 h-10'
-              backgroundColor={currentPage === page ? '#88a788' : '#FFFFFF'}
-              onClick={() => onPageChange(page)}
-            >
-              {page}
-            </Button>
-          </li>
-        ))}
-        <li>
-          <Button
-            size='None'
-            className='w-16 h-10'
-            backgroundColor='#74AA9C'
-            onClick={() => onPageChange(currentPage + 1)}
-            disabled={currentPage === totalPages}
-          >
-            다음
-          </Button>
-        </li>
-      </ul>
-    </nav>
+      ))}
+      <li>
+        <Button
+          size='None'
+          className='w-16 h-10'
+          backgroundColor='#74AA9C'
+          onClick={() => onPageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+        >
+          다음
+        </Button>
+      </li>
+    </ul>
   );
 };

@@ -20,11 +20,11 @@ export async function RepositoryList({
   }
 
   return (
-    <section>
+    <section className='my-2'>
       {repositoryList.data.map((repo, index) => {
         return (
-          <div className='flex flex-col' key={index + 10}>
-            <div className='w-max flex flex-row items-center justify-between'>
+          <div className='flex flex-col my-4' key={index + 10}>
+            <div className='w-max flex flex-row items-center justify-between my-1'>
               <Image
                 className='rounded-full'
                 width={56}
@@ -58,7 +58,7 @@ export async function RepositoryList({
         );
       })}
       <Pagination
-        className='mt-4 mb-12'
+        className='mt-4 mb-12 mx-auto'
         currentPage={page}
         totalPages={repositoryList.data.length <= 0 ? page : page + 1}
       />

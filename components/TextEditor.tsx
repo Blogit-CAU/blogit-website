@@ -11,7 +11,7 @@ const TextItem = dynamic(() => import('react-quill'), {
 
 export default function TextEditor() {
   const [text, setText] = useState(
-    localStorage.getItem('TEXT_KEY') || '입력없음',
+    typeof window !== "undefined" ? localStorage.getItem('TEXT_KEY') || '' : '입력없음',
   );
 
   return (
