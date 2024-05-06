@@ -11,7 +11,7 @@
     "prettier": "prettier . --write"
   },
   "dependencies": {
-    "@headlessui/react": "^1.7.19",
+    "@headlessui/react": "^2.0.0",
     "classnames": "^2.5.1",
     "next": "14.2.3",
     "octokit": "^3.2.1",

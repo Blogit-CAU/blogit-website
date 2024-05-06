@@ -2,10 +2,12 @@
 
 import { Octokit } from 'octokit';
 
-const octokit = new Octokit({});
+const octokit = new Octokit({
+});
 
 export async function getCommitList(
-  userId: string,
+  committer: string,
+  owner: string,
   repositoryName: string,
   page: number,
 ) {
@@ -14,7 +16,8 @@ export async function getCommitList(
     headers: {
       accept: 'application/vnd.github+json',
     },
-    owner: userId,
+    committer: committer,
+    owner: owner,
     repo: repositoryName,
     per_page: pageSize,
     page: page,
