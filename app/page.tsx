@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 
@@ -21,7 +22,7 @@ const Home = () => {
     <main className='flex min-h-screen flex-col items-center justify-between p-20 pb-44'>
       <div>
         <h1 className='text-[5rem]'>BloGit</h1>
-        <img src='' alt='blogitLogo'></img>
+        <Image width={100} height={200} src={'/logo.svg'} alt='blogitLogo'></Image>
       </div>
       <div className='w-full flex justify-center gap-2'>
         <input
