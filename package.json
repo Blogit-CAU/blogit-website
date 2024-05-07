@@ -13,14 +13,17 @@
   "dependencies": {
     "@headlessui/react": "^2.0.0",
     "classnames": "^2.5.1",
+    "diff-match-patch": "^1.0.5",
     "next": "14.2.3",
     "octokit": "^3.2.1",
     "react": "^18",
     "react-dom": "^18",
     "react-quill": "^2.0.0",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/diff-match-patch": "^1.0.36",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

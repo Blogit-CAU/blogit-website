@@ -11,11 +11,11 @@ export default async function PostEditPage() {
       <div className='w-[70%] m-10'>
         <TextEditor />
       </div>
-        <Link href={'/post/share'}>
-          <Button size='XL' backgroundColor='white'>
-            {'확인'}
-          </Button>
-        </Link>
+      <Link href={'/post/share'}>
+        <Button size='L' backgroundColor='#74AA9C' className='h-10'>
+          {'확인'}
+        </Button>
+      </Link>
     </div>
   );
 }

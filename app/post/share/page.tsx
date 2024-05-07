@@ -58,8 +58,8 @@ export default function PostSharedPage() {
         </ul>
       </section>
       <Link href={'/'}>
-        <Button size='XL' backgroundColor='white'>
-          {'GO to init'}
+        <Button size='L' backgroundColor='#74AA9C' className='h-10'>
+          {'다시 글 작성하기'}
         </Button>
       </Link>
     </main>
