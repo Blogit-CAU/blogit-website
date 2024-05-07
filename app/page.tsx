@@ -2,16 +2,16 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 
 const Home = () => {
   const router = useRouter();
-  const [gitLink, setGitLink] = useState<string>('');
+  //const [gitLink, setGitLink] = useState<string>('');
   const linkInput = useRef<HTMLInputElement>(null);
 
   function handleSubmit() {
     const next = linkInput.current!.value;
-    setGitLink(next);
+    //setGitLink(next);
     router.push(`/post?githubId=${next}`);
     console.log(() => {
       return next;
@@ -32,7 +32,7 @@ const Home = () => {
       <div className='w-full flex justify-center gap-2'>
         <input
           type='text'
-          placeholder='Github 주소를 입력해주세요!'
+          placeholder='Github ID를 입력해주세요!'
           ref={linkInput}
           className='w-[30%] border border-gray-400 rounded-xl p-3 focus:outline-0 placeholder:pl-2'
         ></input>
