@@ -1,15 +1,23 @@
 import { Button } from '@/components/Button';
 import MyPostList from '@/components/MyPost';
-import { Pagination } from '@/components/Pagination';
 import Link from 'next/link';
-import React, { Suspense } from 'react';
+import React from 'react';
 
-export default function PostSharedPage() {
+export default function PostSharedPage({
+  searchParams,
+}: {
+  searchParams: {
+    githubId?: string;
+    page?: string;
+  };
+}) {
+  //searchParams !!는 잠시만..
+  const githubId = localStorage.getItem('GIT_ID');
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-10'>
       <div className='flex justify-center gap-3 w-full '>
         <section className='p-10 border rounded-xl w-[35%] '>
-          <h1 className='text-[2rem]'>GitHub ID 의 글</h1>
+          <h1 className='text-[2rem]'>{githubId}의 글</h1>
           <MyPostList />
         </section>
         <section className='p-10 border rounded-xl w-[35%]'>
