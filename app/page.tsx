@@ -13,9 +13,7 @@ const Home = () => {
     const next = linkInput.current!.value;
     //setGitLink(next);
     router.push(`/post?githubId=${next}`);
-    console.log(() => {
-      return next;
-    });
+    localStorage.setItem('GIT_ID', next);
   }
 
   return (
