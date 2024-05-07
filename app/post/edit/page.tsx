@@ -1,5 +1,7 @@
+import { Button } from '@/components/Button';
 import { Pagination } from '@/components/Pagination';
 import TextEditor from '@/components/TextEditor';
+import Link from 'next/link';
 import React, { Suspense } from 'react';
 
 export default async function PostEditPage() {
@@ -9,9 +11,15 @@ export default async function PostEditPage() {
       <div className='w-[70%] m-10'>
         <TextEditor />
       </div>
-      <Suspense fallback={<div>loading...</div>}>
-        <Pagination currentPage={4} totalPages={5} />
-      </Suspense>
+        <Link href={'/post/share'}>
+          <Button size='XL' backgroundColor='white'>
+            {'확인'}
+          </Button>
+        </Link>
     </div>
   );
 }
+/*
+<Suspense fallback={<div>loading...</div>}>
+        <Pagination currentPage={4} totalPages={5} />
+      </Suspense>*/

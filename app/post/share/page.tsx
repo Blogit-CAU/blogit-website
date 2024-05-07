@@ -1,16 +1,20 @@
+import { Button } from '@/components/Button';
 import MyPostList from '@/components/MyPost';
-import React from 'react';
+import { Pagination } from '@/components/Pagination';
+import Link from 'next/link';
+import React, { Suspense } from 'react';
 
 export default function PostSharedPage() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-10'>
-      <div className='flex justify-center gap-3 w-full'>
+      <div className='flex justify-center gap-3 w-full '>
         <section className='p-10 border rounded-xl w-[35%] '>
           <h1 className='text-[2rem]'>GitHub ID 의 글</h1>
           <MyPostList />
         </section>
         <section className='p-10 border rounded-xl w-[35%]'>
           <h1 className='text-[2rem]'>글 업로드 하기</h1>
+          <p>링크를 클릭해보세요!</p>
           <div className='flex flex-col'>
             <a
               href='https://www.tistory.com/'
@@ -53,6 +57,11 @@ export default function PostSharedPage() {
           <li>theme4</li>
         </ul>
       </section>
+      <Link href={'/'}>
+        <Button size='XL' backgroundColor='white'>
+          {'GO to init'}
+        </Button>
+      </Link>
     </main>
   );
 }
