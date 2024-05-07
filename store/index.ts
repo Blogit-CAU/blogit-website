@@ -14,6 +14,7 @@ interface CommitState {
   add: (newCommit: Commit) => void;
   remove: (commitId: string) => void;
   update: (commitId: string, updatedCommit: Commit) => void;
+  clear: () => void;
 }
 
 export const useCommitStore = create<
@@ -36,5 +37,6 @@ export const useCommitStore = create<
           commit.payload.sha === commitId ? updatedCommit : commit,
         ),
       })),
+    clear: () => set((state) => ({ commits: [] })),
   })),
 );

@@ -24,15 +24,6 @@ export default async function PostPage({
         </div>
         <div className='w-1/2 mr-7'>
           <CommitDetailList />
-          <Link href={'/post/edit'}>
-            <Button
-              className='w-full h-11'
-              size='None'
-              backgroundColor='#74AA9C'
-            >
-              {'글 작성하기'}
-            </Button>
-          </Link>
         </div>
       </div>
     </>
