@@ -1,28 +1,42 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+//import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
 import { generatePost } from '@/api/openai';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
-import Link from 'next/link';
 import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/post';
 
-const TextItem = dynamic(() => import('react-quill'), {
+import { MDEditorProps } from '@uiw/react-md-editor';
+import dynamic from 'next/dynamic';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
+
+const MDEditor = dynamic<MDEditorProps>(() => import('@uiw/react-md-editor'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
+/*
+const TextItem = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+});
+*/
 export default function TextEditor() {
   const router = useRouter();
   const commitStore = useCommitStore();
   const postStore = usePostStore();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+
+  const handleChange = (value: any) => {
+    setText(value);
+  };
 
   useEffect(() => {
     async function init() {
@@ -61,11 +75,16 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-      <TextItem
+      {/*<TextItem
         theme='snow'
         value={text}
         onChange={setText}
         style={{ height: '500px' }}
+    />*/}
+      <MDEditor
+        style={{ height: '500px' }}
+        value={text}
+        onChange={handleChange}
       />
 
       <Button
