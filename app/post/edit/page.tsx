@@ -14,5 +14,14 @@ export default async function PostEditPage() {
 }
 
 const TipForWriting: React.FC = () => {
-  return <div>ddkjdkfj</div>;
+  const sayings = ['글을 잘써야지 잘삽니다', 'say2', 'say3', 'say4', 'say5'];
+  const sayIcons = ['💌', '💡', '👀', '❤️', '👍', '✌️', '💕'];
+  //각 배열의 길이안에서 난수 생성하고 그거 띄우기
+
+  return (
+    <div className='flex gap-3 w-[70%] px-10 py-5 bg-slate-100 rounded-2xl'>
+      <div>{sayIcons[0]}</div>
+      <p className=' text-slate-600'>{sayings[0]}</p>
+    </div>
+  );
 };
