@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@headlessui/react": "^2.0.0",
+    "@uiw/react-md-editor": "3.6.0",
     "ai": "^3.1.1",
     "classnames": "^2.5.1",
     "diff-match-patch": "^1.0.5",
     "next": "14.2.3",
+    "next-remove-imports": "^1.0.12",
     "octokit": "^3.2.1",
     "openai": "^4.42.0",
     "react": "^18",
