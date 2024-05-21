@@ -60,6 +60,24 @@ export default function TextEditor() {
     }
   }, [commitStore.commits.length]);
 
+  function handleDownload() {
+    const htmlText = <MDEditor resource={text} />;
+    postStore.add(htmlText.props.resource);
+    console.log(htmlText.props.resource);
+
+    const fileName = 'mypost.md';
+    const fileContent = htmlText.props.resource;
+    //다운로드는 되는데 한글 깨짐
+
+    const element = document.createElement('a');
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    window.open(URL.createObjectURL(file), 'post_download');
+    element.href = URL.createObjectURL(file);
+    element.download = fileName;
+    document.body.appendChild(element);
+    element.click();
+  }
+
   const handleSubmit = () => {
     postStore.add(text);
     router.push('/post/share');
@@ -81,21 +99,26 @@ export default function TextEditor() {
         onChange={setText}
         style={{ height: '500px' }}
     />*/}
-      <MDEditor
-        style={{ height: '500px' }}
-        value={text}
-        onChange={handleChange}
-      />
-
-      <Button
-        size='L'
-        backgroundColor='#74AA9C'
-        className='h-10 mt-20'
-        onClick={handleSubmit}
-        disabled={loading}
-      >
-        {'확인'}
-      </Button>
+      <MDEditor height={400} value={text} onChange={handleChange} />
+      <div className='flex gap-4 p-10 '>
+        <Button
+          size='L'
+          backgroundColor='#74AA9C'
+          className='h-10'
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {'확인'}
+        </Button>
+        <Button
+          size='L'
+          backgroundColor='#95afa8'
+          className='h-10'
+          onClick={handleDownload}
+        >
+          {'글 다운로드 하기'}
+        </Button>
+      </div>
     </>
   );
 }

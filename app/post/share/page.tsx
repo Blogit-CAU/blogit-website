@@ -10,18 +10,6 @@ import React, { Suspense, useEffect } from 'react';
 export default function PostSharedPage() {
   const postStore = usePostStore();
 
-  function handleDownload() {
-    const fileName = 'mypost.md';
-    const fileContent = postStore.post;
-
-    const element = document.createElement('a');
-    const file = new Blob([fileContent], { type: 'text/plain' });
-    window.open(URL.createObjectURL(file), 'post_download');
-    element.href = URL.createObjectURL(file);
-    element.download = fileName;
-    document.body.appendChild(element);
-    element.click();
-  }
 
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-10'>
@@ -74,14 +62,7 @@ export default function PostSharedPage() {
           <li>theme4</li>
         </ul>
       </section>
-      <Button
-        size='L'
-        backgroundColor='#95afa8'
-        className='h-10 my-1'
-        onClick={handleDownload}
-      >
-        {'글 다운로드 하기'}
-      </Button>
+      
       <Link href={'/'}>
         <Button size='L' backgroundColor='#74AA9C' className='h-10'>
           {'다시 글 작성하기'}
