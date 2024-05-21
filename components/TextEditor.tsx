@@ -1,28 +1,42 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+//import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
 import { generatePost } from '@/api/openai';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
-import Link from 'next/link';
 import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/post';
 
-const TextItem = dynamic(() => import('react-quill'), {
+import { MDEditorProps } from '@uiw/react-md-editor';
+import dynamic from 'next/dynamic';
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
+
+const MDEditor = dynamic<MDEditorProps>(() => import('@uiw/react-md-editor'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
+/*
+const TextItem = dynamic(() => import('react-quill'), {
+  ssr: false,
+  loading: () => <p>Loading ...</p>,
+});
+*/
 export default function TextEditor() {
   const router = useRouter();
   const commitStore = useCommitStore();
   const postStore = usePostStore();
   const [text, setText] = useState('');
   const [loading, setLoading] = useState<boolean>(false);
+
+  const handleChange = (value: any) => {
+    setText(value);
+  };
 
   useEffect(() => {
     async function init() {
@@ -46,6 +60,24 @@ export default function TextEditor() {
     }
   }, [commitStore.commits.length]);
 
+  function handleDownload() {
+    const htmlText = <MDEditor resource={text} />;
+    postStore.add(htmlText.props.resource);
+    console.log(htmlText.props.resource);
+
+    const fileName = 'mypost.md';
+    const fileContent = htmlText.props.resource;
+    //다운로드는 되는데 한글 깨짐
+
+    const element = document.createElement('a');
+    const file = new Blob([fileContent], { type: 'text/plain' });
+    window.open(URL.createObjectURL(file), 'post_download');
+    element.href = URL.createObjectURL(file);
+    element.download = fileName;
+    document.body.appendChild(element);
+    element.click();
+  }
+
   const handleSubmit = () => {
     postStore.add(text);
     router.push('/post/share');
@@ -61,22 +93,32 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-      <TextItem
+      {/*<TextItem
         theme='snow'
         value={text}
         onChange={setText}
         style={{ height: '500px' }}
-      />
-
-      <Button
-        size='L'
-        backgroundColor='#74AA9C'
-        className='h-10 mt-20'
-        onClick={handleSubmit}
-        disabled={loading}
-      >
-        {'확인'}
-      </Button>
+    />*/}
+      <MDEditor height={400} value={text} onChange={handleChange} />
+      <div className='flex gap-4 p-10 '>
+        <Button
+          size='L'
+          backgroundColor='#74AA9C'
+          className='h-10'
+          onClick={handleSubmit}
+          disabled={loading}
+        >
+          {'확인'}
+        </Button>
+        <Button
+          size='L'
+          backgroundColor='#95afa8'
+          className='h-10'
+          onClick={handleDownload}
+        >
+          {'글 다운로드 하기'}
+        </Button>
+      </div>
     </>
   );
 }
