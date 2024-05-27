@@ -4,7 +4,7 @@ import { Octokit } from 'octokit';
 import { Endpoints } from '@octokit/types';
 
 const octokit = new Octokit({
-  auth: process.env.NEXT_PUBLIC_GITHUB_TOKEN,
+  auth: process.env.GITHUB_TOKEN,
 });
 
 export type CommitListPayload =
