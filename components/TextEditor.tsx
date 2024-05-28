@@ -37,13 +37,13 @@ export default function TextEditor() {
     async function init() {
       setIsLoading(true);
 
-      const streamableCompletion = await generateCompletion(
+      const { output } = await generateCompletion(
         JSON.stringify(commitStore.commits),
       );
-      for await (const text of readStreamableValue(streamableCompletion)) {
-        setText(text ?? '');
+      for await (const delta of readStreamableValue(output)) {
+        setText(prev => `${prev}${delta}`);
       }
-
+      
       setIsLoading(false);
     }
     init();
