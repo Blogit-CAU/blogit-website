@@ -1,19 +1,12 @@
 import TextEditor from '@/components/TextEditor';
+import { Headline_00 } from '@/components/Typography';
 import React, { Suspense } from 'react';
 
 export default async function PostEditPage() {
   return (
     <div className='flex flex-col justify-center items-center h-full gap-4'>
-      <h1 className='text-[2rem]'>직접 수정하기</h1>
+      <Headline_00 className='text-[2rem]'>직접 수정하기</Headline_00>
       <TipForWriting />
-      <div className='flex w-[70%] mt-4'>
-        <input
-          type='text'
-          placeholder='아티클의 제목을 입력해주세요'
-          className='border rounded-lg p-2 w-[20rem] focus:outline-none'
-        />
-      </div>
-
       <div className='w-[70%] h-[50%]'>
         <TextEditor />
       </div>

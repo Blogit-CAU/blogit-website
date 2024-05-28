@@ -4,88 +4,78 @@ import React, { useEffect, useState } from 'react';
 //import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
-import { generatePost } from '@/api/openai';
+// import { generatePost } from '@/api/openai';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
 import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/post';
+import { useChat } from 'ai/react';
 
 import { MDEditorProps } from '@uiw/react-md-editor';
 import dynamic from 'next/dynamic';
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { generateCompletion } from '@/api/openai';
+import { readStreamableValue } from 'ai/rsc';
 
 const MDEditor = dynamic<MDEditorProps>(() => import('@uiw/react-md-editor'), {
   ssr: false,
   loading: () => <p>Loading ...</p>,
 });
 
-/*
-const TextItem = dynamic(() => import('react-quill'), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
-});
-*/
 export default function TextEditor() {
   const router = useRouter();
   const commitStore = useCommitStore();
   const postStore = usePostStore();
-  const [text, setText] = useState('');
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleChange = (value: any) => {
-    setText(value);
-  };
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('');
+  const [text, setText] = useState<string>('');
 
   useEffect(() => {
     async function init() {
-      const stream = await generatePost(JSON.stringify(commitStore.commits)); // responseData는 스트리밍된 데이터입니다.
+      setIsLoading(true);
 
-      let newText = '';
-      setLoading(true);
-
-      for await (const chunk of stream) {
-        const content = chunk.choices[0]?.delta?.content || '';
-        // 새로운 텍스트를 설정하고 공백을 제거합니다.
-        newText += content;
+      const streamableCompletion = await generateCompletion(
+        JSON.stringify(commitStore.commits),
+      );
+      for await (const text of readStreamableValue(streamableCompletion)) {
+        setText(text ?? '');
       }
 
-      // 새로운 텍스트를 설정합니다.
-      setText(newText);
-      setLoading(false);
+      setIsLoading(false);
     }
-    if (commitStore.commits.length > 0) {
-      init();
-    }
-  }, [commitStore.commits.length]);
+    init();
+  }, []);
 
   function handleDownload() {
-    const htmlText = <MDEditor resource={text} />;
-    postStore.add(htmlText.props.resource);
-    console.log(htmlText.props.resource);
+    // Create a Blob object representing the file content
+    const fileContent = text; // Replace with your actual file content
+    const blob = new Blob([fileContent], { type: 'text/plain' });
 
-    const fileName = 'mypost.md';
-    const fileContent = htmlText.props.resource;
-    //다운로드는 되는데 한글 깨짐
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${title}.md`; // Set the file name
 
-    const element = document.createElement('a');
-    const file = new Blob([fileContent], { type: 'text/plain' });
-    window.open(URL.createObjectURL(file), 'post_download');
-    element.href = URL.createObjectURL(file);
-    element.download = fileName;
-    document.body.appendChild(element);
-    element.click();
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
   }
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
     postStore.add(text);
     router.push('/post/share');
   };
 
   return (
     <>
-      {loading && (
+      {isLoading && (
         <div className='flex items-center mb-4'>
           <div className='flex justify-center items-center mr-4'>
             <div className='border border-t-4 border-gray-200 rounded-full w-12 h-12 animate-spin'></div>
@@ -93,32 +83,41 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-      {/*<TextItem
-        theme='snow'
-        value={text}
-        onChange={setText}
-        style={{ height: '500px' }}
-    />*/}
-      <MDEditor height={400} value={text} onChange={handleChange} />
-      <div className='flex gap-4 p-10 '>
-        <Button
-          size='L'
-          backgroundColor='#74AA9C'
-          className='h-10'
-          onClick={handleSubmit}
-          disabled={loading}
-        >
-          {'확인'}
-        </Button>
-        <Button
-          size='L'
-          backgroundColor='#95afa8'
-          className='h-10'
-          onClick={handleDownload}
-        >
-          {'글 다운로드 하기'}
-        </Button>
-      </div>
+      <form onSubmit={handleSubmit}>
+        <input
+          type='text'
+          placeholder='아티클의 제목을 입력해주세요'
+          className='border rounded-lg p-2 w-[20rem] focus:outline-none mt-4'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <MDEditor
+          height={720}
+          value={text}
+          autoFocus={true}
+          onChange={(v, e) => setText((prev) => (prev = v!))}
+        />
+        <div className='flex gap-4 p-10 '>
+          <Button
+            type='submit'
+            size='L'
+            backgroundColor='#74AA9C'
+            className='h-10'
+            disabled={isLoading}
+          >
+            {'확인'}
+          </Button>
+          <Button
+            size='L'
+            backgroundColor='#95afa8'
+            className='h-10'
+            onClick={handleDownload}
+            disabled={isLoading}
+          >
+            {'글 다운로드 하기'}
+          </Button>
+        </div>
+      </form>
     </>
   );
 }
