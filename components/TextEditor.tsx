@@ -33,9 +33,9 @@ export default function TextEditor() {
         JSON.stringify(commitStore.commits),
       );
       for await (const delta of readStreamableValue(output)) {
-        setText(prev => `${prev}${delta}`);
+        setText((prev) => `${prev}${delta}`);
       }
-      
+
       setIsLoading(false);
     }
     init();
