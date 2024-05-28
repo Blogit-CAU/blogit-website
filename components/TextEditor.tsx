@@ -1,28 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-//import dynamic from 'next/dynamic';
 import 'react-quill/dist/quill.snow.css';
 
-// import { generatePost } from '@/api/openai';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
 import { Button } from './Button';
 import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/post';
-import { useChat } from 'ai/react';
 
-import { MDEditorProps } from '@uiw/react-md-editor';
-import dynamic from 'next/dynamic';
-import '@uiw/react-md-editor/markdown-editor.css';
-import '@uiw/react-markdown-preview/markdown.css';
+import MDEditor from '@uiw/react-md-editor';
 import { generateCompletion } from '@/api/openai';
 import { readStreamableValue } from 'ai/rsc';
 
-const MDEditor = dynamic<MDEditorProps>(() => import('@uiw/react-md-editor'), {
-  ssr: false,
-  loading: () => <p>Loading ...</p>,
-});
+import '@uiw/react-md-editor/markdown-editor.css';
+import '@uiw/react-markdown-preview/markdown.css';
 
 export default function TextEditor() {
   const router = useRouter();
