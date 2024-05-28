@@ -10,7 +10,6 @@ import React, { Suspense, useEffect } from 'react';
 export default function PostSharedPage() {
   const postStore = usePostStore();
 
-
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-10'>
       <div className='flex justify-center gap-3 w-full '>
@@ -62,7 +61,7 @@ export default function PostSharedPage() {
           <li>theme4</li>
         </ul>
       </section>
-      
+
       <Link href={'/'}>
         <Button size='L' backgroundColor='#74AA9C' className='h-10'>
           {'다시 글 작성하기'}

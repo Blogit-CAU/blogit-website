@@ -15,9 +15,10 @@ export async function getCommitList(
   owner: string,
   repositoryName: string,
   page: number,
+  isInfinite?: boolean,
 ) {
-  const pageSize = 10;
-  const res = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+  const pageSize = 5;
+  let res = await octokit.request('GET /repos/{owner}/{repo}/commits', {
     headers: {
       accept: 'application/vnd.github+json',
     },
@@ -27,6 +28,28 @@ export async function getCommitList(
     per_page: pageSize,
     page: page,
   });
+
+  if (isInfinite) {
+    let temp = res.data;
+    res.data = [];
+
+    for (let i = 1; i < page; i++) {
+      let next = await octokit.request('GET /repos/{owner}/{repo}/commits', {
+        headers: {
+          accept: 'application/vnd.github+json',
+        },
+        committer: committer,
+        owner: owner,
+        repo: repositoryName,
+        per_page: pageSize,
+        page: i,
+      });
+
+      res.data = res.data.concat(next.data);
+    }
+
+    res.data = res.data.concat(temp);
+  }
 
   return res;
 }

@@ -30,13 +30,16 @@ export default function TextEditor() {
   const postStore = usePostStore();
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
 
   useEffect(() => {
     async function init() {
       setIsLoading(true);
 
-      const streamableCompletion = await generateCompletion(JSON.stringify(commitStore.commits));
+      const streamableCompletion = await generateCompletion(
+        JSON.stringify(commitStore.commits),
+      );
       for await (const text of readStreamableValue(streamableCompletion)) {
         setText(text ?? '');
       }
@@ -47,24 +50,25 @@ export default function TextEditor() {
   }, []);
 
   function handleDownload() {
-    const htmlText = <MDEditor resource={text} />;
-    postStore.add(htmlText.props.resource);
-    console.log(htmlText.props.resource);
+    // Create a Blob object representing the file content
+    const fileContent = text; // Replace with your actual file content
+    const blob = new Blob([fileContent], { type: 'text/plain' });
 
-    const fileName = 'mypost.md';
-    const fileContent = htmlText.props.resource;
-    //다운로드는 되는데 한글 깨짐
+    // Create a link element
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `${title}.md`; // Set the file name
 
-    const element = document.createElement('a');
-    const file = new Blob([fileContent], { type: 'text/plain' });
-    window.open(URL.createObjectURL(file), 'post_download');
-    element.href = URL.createObjectURL(file);
-    element.download = fileName;
-    document.body.appendChild(element);
-    element.click();
+    // Programmatically click the link to trigger the download
+    link.click();
+
+    // Clean up the URL object
+    URL.revokeObjectURL(link.href);
   }
 
-  const handleClick = () => {
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
     postStore.add(text);
     router.push('/post/share');
   };
@@ -79,30 +83,41 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-        <MDEditor 
-          height={400} 
-          value={text}
-          onChange={(v, e) => setText(prev => prev = v!)}
+      <form onSubmit={handleSubmit}>
+        <input
+          type='text'
+          placeholder='아티클의 제목을 입력해주세요'
+          className='border rounded-lg p-2 w-[20rem] focus:outline-none mt-4'
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
-      <div className='flex gap-4 p-10 '>
-        <Button
-          size='L'
-          backgroundColor='#74AA9C'
-          className='h-10'
-          onClick={handleClick}
-          disabled={isLoading}
-        >
-          {'확인'}
-        </Button>
-        <Button
-          size='L'
-          backgroundColor='#95afa8'
-          className='h-10'
-          onClick={handleDownload}
-        >
-          {'글 다운로드 하기'}
-        </Button>
-      </div>
+        <MDEditor
+          height={720}
+          value={text}
+          autoFocus={true}
+          onChange={(v, e) => setText((prev) => (prev = v!))}
+        />
+        <div className='flex gap-4 p-10 '>
+          <Button
+            type='submit'
+            size='L'
+            backgroundColor='#74AA9C'
+            className='h-10'
+            disabled={isLoading}
+          >
+            {'확인'}
+          </Button>
+          <Button
+            size='L'
+            backgroundColor='#95afa8'
+            className='h-10'
+            onClick={handleDownload}
+            disabled={isLoading}
+          >
+            {'글 다운로드 하기'}
+          </Button>
+        </div>
+      </form>
     </>
   );
 }
