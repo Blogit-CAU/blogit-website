@@ -9,7 +9,7 @@ export async function generateCompletion(prompt: string) {
     process.env.NODE_ENV === 'production' ? 'gpt-4o' : 'gpt-3.5-turbo-0125';
   const result = await streamText({
     model: openai(gptModel),
-    maxTokens: 8000,
+    maxTokens: 4000,
     maxRetries: 3,
     messages: [
       {
