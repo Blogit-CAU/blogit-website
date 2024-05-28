@@ -1,4 +1,4 @@
-import { CommitListPayload } from '@/api/github';
+import { CommitListPayload } from '@/app/api/github';
 import { create } from 'zustand';
 import { devtools } from 'zustand/middleware';
 

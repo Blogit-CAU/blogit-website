@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import CommitItem from './CommitItem';
 import { Textarea } from '@headlessui/react';
 import { useCommitStore, type Commit } from '@/store';
-import { getCommit } from '@/api/github';
+import { getCommit } from '@/app/api/github';
 import classNames from 'classnames';
 
 export function CommitDetail({ commitSha }: { commitSha: string }) {

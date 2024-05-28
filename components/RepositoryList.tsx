@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { getRepositoryList } from '@/api/github';
+import { getRepositoryList } from '@/app/api/github';
 import { Pagination } from './Pagination';
 import { BodySmall, Subtitle_02 } from './Typography';
 import Link from 'next/link';

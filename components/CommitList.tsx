@@ -1,6 +1,6 @@
 'use client';
 
-import { getCommitList } from '@/api/github';
+import { getCommitList } from '@/app/api/github';
 import { Endpoints } from '@octokit/types';
 
 import { BodySmall } from './Typography';

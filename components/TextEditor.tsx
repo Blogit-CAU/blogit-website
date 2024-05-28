@@ -10,7 +10,7 @@ import { useRouter } from 'next/navigation';
 import { usePostStore } from '@/store/post';
 
 import MDEditor from '@uiw/react-md-editor';
-import { generateCompletion } from '@/api/openai';
+import { generateCompletion } from '@/app/api/openai';
 import { readStreamableValue } from 'ai/rsc';
 
 import '@uiw/react-md-editor/markdown-editor.css';
