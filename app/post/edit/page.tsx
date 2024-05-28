@@ -2,6 +2,8 @@ import TextEditor from '@/components/TextEditor';
 import { Headline_00 } from '@/components/Typography';
 import React, { Suspense } from 'react';
 
+export const runtime = 'edge';
+
 export default async function PostEditPage() {
   return (
     <div className='flex flex-col justify-center items-center h-full gap-4'>
