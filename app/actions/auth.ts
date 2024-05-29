@@ -1,6 +1,6 @@
 'use server';
 
-import { signIn, SignInResponse } from '@/app/api/platform/auth';
+import { signIn, SignInResponse, signUp } from '@/app/api/platform/auth';
 import { AES } from '@/util/security';
 import { cookies } from 'next/headers';
 
@@ -33,6 +33,17 @@ export async function authenticate(_currentState: unknown, formData: FormData) {
   try {
     res = await signIn(formData);
     await saveToken(res);
+  } catch (err: any) {
+    return false;
+  }
+
+  return true;
+}
+
+export async function signup(_currentState: unknown, formData: FormData) {
+  let res;
+  try {
+    res = await signUp(formData);
   } catch (err: any) {
     return false;
   }

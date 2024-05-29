@@ -7,6 +7,8 @@ import { authenticate } from '@/app/actions/auth';
 import { Input } from '@headlessui/react';
 import { useEffect } from 'react';
 import { redirect, RedirectType } from 'next/navigation';
+import Link from 'next/link';
+import { LabelSmall } from '@/components/Typography';
 
 export default function LoginPage() {
   const [state, formAction] = useFormState(authenticate, undefined);
@@ -21,7 +23,7 @@ export default function LoginPage() {
   return (
     <form action={formAction} className='flex flex-col items-center gap-3'>
       <Input
-        type='memberName'
+        type='text'
         name='memberName'
         placeholder='ID'
         required
@@ -45,6 +47,12 @@ export default function LoginPage() {
       >
         {'로그인'}
       </Button>
+
+      <Link href={'/signup'}>
+        <LabelSmall>
+          {'회원가입 하기'}
+        </LabelSmall>
+      </Link>
     </form>
   );
 }
