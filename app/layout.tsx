@@ -4,7 +4,7 @@ import '@/styles/globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Headline_01, Headline_02, Subtitle_02 } from '@/components/Typography';
-import { getToken } from './actions/auth';
+import { getToken, hasToken } from './actions/auth';
 
 export const metadata: Metadata = {
   title: 'Blogit, power up your technical writing with AI',
@@ -57,7 +57,7 @@ export default async function RootLayout({
                 Company
               </Link>
             </div> */}
-            {(await getToken()) === null ? (
+            {(await hasToken()) === false ? (
               <div className='lg:flex lg:flex-1 lg:justify-end'>
                 <Link
                   href='/login'

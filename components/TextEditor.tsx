@@ -6,8 +6,6 @@ import 'react-quill/dist/quill.snow.css';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
 import { Button } from './Button';
-import { useRouter } from 'next/navigation';
-import { usePostStore } from '@/store/post';
 
 import MDEditor from '@uiw/react-md-editor';
 import { generateCompletion } from '@/app/api/openai';
@@ -15,11 +13,13 @@ import { readStreamableValue } from 'ai/rsc';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { useFormState } from 'react-dom';
+import { createPost } from '@/app/actions/post';
 
 export default function TextEditor() {
-  const router = useRouter();
   const commitStore = useCommitStore();
-  const postStore = usePostStore();
+
+  const [message, formAction] = useFormState(createPost, undefined);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
@@ -57,14 +57,7 @@ export default function TextEditor() {
     // Clean up the URL object
     URL.revokeObjectURL(link.href);
   }
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    postStore.add(text);
-    router.push('/post/share');
-  };
-
+  
   return (
     <>
       {isLoading && (
@@ -75,15 +68,20 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <input
           type='text'
+          name='title'
           placeholder='아티클의 제목을 입력해주세요'
           className='border rounded-lg p-2 w-[20rem] focus:outline-none mt-4'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
         />
         <MDEditor
+          textareaProps={{
+            name: 'content'
+          }}
           height={720}
           value={text}
           autoFocus={true}
