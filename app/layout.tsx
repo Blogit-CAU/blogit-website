@@ -4,13 +4,14 @@ import '@/styles/globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Headline_01, Headline_02, Subtitle_02 } from '@/components/Typography';
+import { getToken } from './actions/auth';
 
 export const metadata: Metadata = {
   title: 'Blogit, power up your technical writing with AI',
   description: "Let's not compare our writing to someone else's.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -56,14 +57,25 @@ export default function RootLayout({
                 Company
               </Link>
             </div> */}
-            {/* <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-              <a
-                href='#'
-                className='text-sm font-semibold leading-6 text-gray-900'
-              >
-                Log in <span aria-hidden='true'>&rarr;</span>
-              </a>
-            </div> */}
+            {(await getToken()) === null ? (
+              <div className='lg:flex lg:flex-1 lg:justify-end'>
+                <Link
+                  href='/login'
+                  className='text-sm font-semibold leading-6 text-gray-900'
+                >
+                  Log in
+                </Link>
+              </div>
+            ) : (
+              <div className='lg:flex lg:flex-1 lg:justify-end'>
+                <Link
+                  href='/logout'
+                  className='text-sm font-semibold leading-6 text-gray-900'
+                >
+                  Log out
+                </Link>
+              </div>
+            )}
           </nav>
         </header>
         {children}
