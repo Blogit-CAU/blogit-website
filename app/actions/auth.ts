@@ -5,8 +5,13 @@ import CryptoJS from 'crypto-js';
 import { cookies } from 'next/headers';
 
 export async function saveToken(sessionData: SignInResponse) {
-  const encryptedJson = CryptoJS.AES.encrypt(JSON.stringify({ data: sessionData }), process.env.COOKIE_SECURITY_KEY!).toString()
-  const encryptedSessionData = CryptoJS.enc.Base64.stringify(CryptoJS.enc.Utf8.parse(encryptedJson))
+  const encryptedJson = CryptoJS.AES.encrypt(
+    JSON.stringify({ data: sessionData }),
+    process.env.COOKIE_SECURITY_KEY!,
+  ).toString();
+  const encryptedSessionData = CryptoJS.enc.Base64.stringify(
+    CryptoJS.enc.Utf8.parse(encryptedJson),
+  );
 
   cookies().set('session', encryptedSessionData, {
     httpOnly: true,
@@ -23,9 +28,14 @@ export async function getToken() {
     return null;
   }
 
-  const decryptedData = CryptoJS.enc.Base64.parse(encryptedSessionData).toString(CryptoJS.enc.Utf8)
-  const decrypted = CryptoJS.AES.decrypt(decryptedData, process.env.COOKIE_SECURITY_KEY!).toString(CryptoJS.enc.Utf8);
-  console.log(decrypted);
+  const decryptedData = CryptoJS.enc.Base64.parse(
+    encryptedSessionData,
+  ).toString(CryptoJS.enc.Utf8);
+  const decrypted = CryptoJS.AES.decrypt(
+    decryptedData,
+    process.env.COOKIE_SECURITY_KEY!,
+  ).toString(CryptoJS.enc.Utf8);
+
   const { data } = JSON.parse(decrypted);
 
   return data as SignInResponse;

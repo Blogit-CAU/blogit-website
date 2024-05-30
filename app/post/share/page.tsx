@@ -1,19 +1,16 @@
-'use client';
-
 import { Button } from '@/components/Button';
 import MyPostList from '@/components/MyPost';
 import { Pagination } from '@/components/Pagination';
-import { usePostStore } from '@/store/post';
+import { Headline_01 } from '@/components/Typography';
 import Link from 'next/link';
 import React, { Suspense, useEffect } from 'react';
 
-export default function PostSharedPage() {
-  const postStore = usePostStore();
-
+export default async function PostSharedPage() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-center gap-10'>
       <div className='flex justify-center gap-3 w-full '>
-        <section className='p-10 border rounded-xl w-[35%] '>
+        <section className='p-6 border rounded-xl w-[35%] '>
+          <Headline_01>{'내가 작성한 글'}</Headline_01>
           <MyPostList />
         </section>
         <section className='p-10 border rounded-xl w-[35%]'>

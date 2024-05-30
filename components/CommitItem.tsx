@@ -22,7 +22,7 @@ export default function CommitItem({ commit }: { commit: Commit }) {
 
   return (
     <div
-      className={`flex flex-col w-full p-2 hover:bg-gray-300 ${selectedClasses}`}
+      className={`flex flex-col w-full p-2 hover:bg-gray-300 ${selectedClasses} cursor-pointer`}
       onClick={() => handleClick()}
     >
       <BodyMedium>{commit.payload.commit.message}</BodyMedium>

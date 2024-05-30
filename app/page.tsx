@@ -1,7 +1,6 @@
 'use client';
 
 import { useCommitStore } from '@/store';
-import { usePostStore } from '@/store/post';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef } from 'react';
@@ -11,11 +10,9 @@ const Home = () => {
   //const [gitLink, setGitLink] = useState<string>('');
   const linkInput = useRef<HTMLInputElement>(null);
   const commitStore = useCommitStore();
-  const postStore = usePostStore();
 
   function handleSubmit() {
     commitStore.clear();
-    postStore.clear();
     const next = linkInput.current!.value;
     //setGitLink(next);
     router.push(`/post?githubId=${next}`);

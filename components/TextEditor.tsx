@@ -15,8 +15,15 @@ import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
 import { useFormState } from 'react-dom';
 import { createPost } from '@/app/actions/post';
+import { getPost } from '@/app/api/platform/post';
 
-export default function TextEditor() {
+export default function TextEditor({
+  articleId,
+  readOnly
+}: {
+  articleId?: number
+  readOnly?: boolean
+}) {
   const commitStore = useCommitStore();
 
   const [message, formAction] = useFormState(createPost, undefined);
@@ -26,7 +33,7 @@ export default function TextEditor() {
   const [text, setText] = useState<string>('');
 
   useEffect(() => {
-    async function init() {
+    async function callGPT() {
       setIsLoading(true);
 
       const { output } = await generateCompletion(
@@ -38,7 +45,23 @@ export default function TextEditor() {
 
       setIsLoading(false);
     }
-    init();
+    async function fetchArticle() {
+      setIsLoading(true);
+
+      if (articleId) {
+        const article = await getPost(articleId);
+        setTitle(article.title);
+        setText(article.content);
+      }
+
+      setIsLoading(false);
+    }
+
+    if (articleId === undefined) {
+      callGPT();
+    } else {
+      fetchArticle();
+    }
   }, []);
 
   function handleDownload() {
@@ -57,7 +80,7 @@ export default function TextEditor() {
     // Clean up the URL object
     URL.revokeObjectURL(link.href);
   }
-  
+
   return (
     <>
       {isLoading && (
@@ -77,10 +100,12 @@ export default function TextEditor() {
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           required
+          readOnly={readOnly}
         />
         <MDEditor
           textareaProps={{
-            name: 'content'
+            name: 'content',
+            readOnly: readOnly
           }}
           height={720}
           value={text}
@@ -93,7 +118,7 @@ export default function TextEditor() {
             size='L'
             backgroundColor='#74AA9C'
             className='h-10'
-            disabled={isLoading}
+            disabled={isLoading || readOnly}
           >
             {'확인'}
           </Button>

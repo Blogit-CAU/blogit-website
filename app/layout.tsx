@@ -37,8 +37,8 @@ export default async function RootLayout({
                 </Subtitle_02>
               </Link>
             </div>
-            {/* <div className='hidden lg:flex lg:gap-x-12'>
-              <Link
+            <div className='lg:flex lg:gap-x-12 ml-auto mr-6'>
+              {/* <Link
                 href='#'
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
@@ -49,14 +49,14 @@ export default async function RootLayout({
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
                 Marketplace
-              </Link>
+              </Link> */}
               <Link
-                href='#'
+                href='/post/share'
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
-                Company
+                공유하기
               </Link>
-            </div> */}
+            </div>
             {(await hasToken()) === false ? (
               <div className='lg:flex lg:flex-1 lg:justify-end'>
                 <Link

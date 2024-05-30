@@ -49,9 +49,7 @@ export default function LoginPage() {
       </Button>
 
       <Link href={'/signup'}>
-        <LabelSmall>
-          {'회원가입 하기'}
-        </LabelSmall>
+        <LabelSmall>{'회원가입 하기'}</LabelSmall>
       </Link>
     </form>
   );

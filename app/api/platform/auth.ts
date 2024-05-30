@@ -39,4 +39,3 @@ export const signUp = async (formData: FormData) => {
 
   return (await res.json()) as SignUpResponse;
 };
-
