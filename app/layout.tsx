@@ -4,13 +4,14 @@ import '@/styles/globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Headline_01, Headline_02, Subtitle_02 } from '@/components/Typography';
+import { getToken, hasToken } from './actions/auth';
 
 export const metadata: Metadata = {
   title: 'Blogit, power up your technical writing with AI',
   description: "Let's not compare our writing to someone else's.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -36,8 +37,8 @@ export default function RootLayout({
                 </Subtitle_02>
               </Link>
             </div>
-            {/* <div className='hidden lg:flex lg:gap-x-12'>
-              <Link
+            <div className='lg:flex lg:gap-x-12 ml-auto mr-6'>
+              {/* <Link
                 href='#'
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
@@ -48,22 +49,33 @@ export default function RootLayout({
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
                 Marketplace
-              </Link>
+              </Link> */}
               <Link
-                href='#'
+                href='/post/share'
                 className='text-sm font-semibold leading-6 text-gray-900'
               >
-                Company
+                공유하기
               </Link>
-            </div> */}
-            {/* <div className='hidden lg:flex lg:flex-1 lg:justify-end'>
-              <a
-                href='#'
-                className='text-sm font-semibold leading-6 text-gray-900'
-              >
-                Log in <span aria-hidden='true'>&rarr;</span>
-              </a>
-            </div> */}
+            </div>
+            {(await hasToken()) === false ? (
+              <div className='lg:flex lg:flex-1 lg:justify-end'>
+                <Link
+                  href='/login'
+                  className='text-sm font-semibold leading-6 text-gray-900'
+                >
+                  Log in
+                </Link>
+              </div>
+            ) : (
+              <div className='lg:flex lg:flex-1 lg:justify-end'>
+                <Link
+                  href='/logout'
+                  className='text-sm font-semibold leading-6 text-gray-900'
+                >
+                  Log out
+                </Link>
+              </div>
+            )}
           </nav>
         </header>
         {children}

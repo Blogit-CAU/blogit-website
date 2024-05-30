@@ -6,8 +6,6 @@ import 'react-quill/dist/quill.snow.css';
 import { useCommitStore } from '@/store';
 import { Headline_00 } from './Typography';
 import { Button } from './Button';
-import { useRouter } from 'next/navigation';
-import { usePostStore } from '@/store/post';
 
 import MDEditor from '@uiw/react-md-editor';
 import { generateCompletion } from '@/app/api/openai';
@@ -15,18 +13,27 @@ import { readStreamableValue } from 'ai/rsc';
 
 import '@uiw/react-md-editor/markdown-editor.css';
 import '@uiw/react-markdown-preview/markdown.css';
+import { useFormState } from 'react-dom';
+import { createPost } from '@/app/actions/post';
+import { getPost } from '@/app/api/platform/post';
 
-export default function TextEditor() {
-  const router = useRouter();
+export default function TextEditor({
+  articleId,
+  readOnly
+}: {
+  articleId?: number
+  readOnly?: boolean
+}) {
   const commitStore = useCommitStore();
-  const postStore = usePostStore();
+
+  const [message, formAction] = useFormState(createPost, undefined);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('');
   const [text, setText] = useState<string>('');
 
   useEffect(() => {
-    async function init() {
+    async function callGPT() {
       setIsLoading(true);
 
       const { output } = await generateCompletion(
@@ -38,7 +45,23 @@ export default function TextEditor() {
 
       setIsLoading(false);
     }
-    init();
+    async function fetchArticle() {
+      setIsLoading(true);
+
+      if (articleId) {
+        const article = await getPost(articleId);
+        setTitle(article.title);
+        setText(article.content);
+      }
+
+      setIsLoading(false);
+    }
+
+    if (articleId === undefined) {
+      callGPT();
+    } else {
+      fetchArticle();
+    }
   }, []);
 
   function handleDownload() {
@@ -58,13 +81,6 @@ export default function TextEditor() {
     URL.revokeObjectURL(link.href);
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    postStore.add(text);
-    router.push('/post/share');
-  };
-
   return (
     <>
       {isLoading && (
@@ -75,15 +91,22 @@ export default function TextEditor() {
           <Headline_00>GPT가 글을 작성중입니다...</Headline_00>
         </div>
       )}
-      <form onSubmit={handleSubmit}>
+      <form action={formAction}>
         <input
           type='text'
+          name='title'
           placeholder='아티클의 제목을 입력해주세요'
           className='border rounded-lg p-2 w-[20rem] focus:outline-none mt-4'
           value={title}
           onChange={(e) => setTitle(e.target.value)}
+          required
+          readOnly={readOnly}
         />
         <MDEditor
+          textareaProps={{
+            name: 'content',
+            readOnly: readOnly
+          }}
           height={720}
           value={text}
           autoFocus={true}
@@ -95,7 +118,7 @@ export default function TextEditor() {
             size='L'
             backgroundColor='#74AA9C'
             className='h-10'
-            disabled={isLoading}
+            disabled={isLoading || readOnly}
           >
             {'확인'}
           </Button>
