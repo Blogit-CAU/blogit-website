@@ -21,10 +21,10 @@ export default async function RootLayout({
       <body>
         <header className='bg-white'>
           <nav
-            className='mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8'
+            className='mx-auto flex max-w-7xl items-center   p-6 px-8'
             aria-label='Global'
           >
-            <div className='flex lg:flex-1'>
+            <div className='flex'>
               <Link
                 href='/'
                 className='-m-1.5 p-1.5 flex flex-row items-center'
@@ -37,7 +37,7 @@ export default async function RootLayout({
                 </Subtitle_02>
               </Link>
             </div>
-            <div className='lg:flex lg:gap-x-12 ml-auto mr-6'>
+            <div className='flex gap-x-12 ml-auto mr-6'>
               {/* <Link
                 href='#'
                 className='text-sm font-semibold leading-6 text-gray-900'
@@ -58,7 +58,7 @@ export default async function RootLayout({
               </Link>
             </div>
             {(await hasToken()) === false ? (
-              <div className='lg:flex lg:flex-1 lg:justify-end'>
+              <div className='flex'>
                 <Link
                   href='/login'
                   className='text-sm font-semibold leading-6 text-gray-900'
@@ -67,7 +67,7 @@ export default async function RootLayout({
                 </Link>
               </div>
             ) : (
-              <div className='lg:flex lg:flex-1 lg:justify-end'>
+              <div className='flex'>
                 <Link
                   href='/logout'
                   className='text-sm font-semibold leading-6 text-gray-900'
