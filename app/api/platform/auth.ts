@@ -10,6 +10,7 @@ export interface SignUpResponse {
 }
 
 export const signIn = async (formData: FormData) => {
+  console.info(formData + 'signin request');
   const res = await fetch(`${process.env.PLATFORM_BASE_URL!}/login`, {
     method: 'POST',
     headers: {
@@ -25,6 +26,7 @@ export const signIn = async (formData: FormData) => {
 };
 
 export const signUp = async (formData: FormData) => {
+  console.info(formData + 'signup request');
   const res = await fetch(`${process.env.PLATFORM_BASE_URL!}/signup`, {
     method: 'POST',
     headers: {

@@ -1,17 +1,18 @@
 'use server';
 
-import { redirect } from 'next/navigation';
 import { postCreate } from '../api/platform/post';
 import { hasToken } from './auth';
 
 export async function createPost(_currentState: unknown, formData: FormData) {
   if (await hasToken()) {
     try {
-      await postCreate(formData);
+      const articleId = await postCreate(formData);
+      console.info(`${articleId} is created.`);
     } catch (err) {
+      console.error(err);
       return false;
     }
   }
 
-  redirect('/post/share');
+  return true;
 }
