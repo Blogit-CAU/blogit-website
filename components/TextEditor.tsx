@@ -16,7 +16,7 @@ import '@uiw/react-markdown-preview/markdown.css';
 import { useFormState } from 'react-dom';
 import { createPost } from '@/app/actions/post';
 import { getPost } from '@/app/api/platform/post';
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 
 export default function TextEditor({
   articleId,
@@ -25,6 +25,7 @@ export default function TextEditor({
   articleId?: number;
   readOnly?: boolean;
 }) {
+  const router = useRouter();
   const commitStore = useCommitStore();
 
   const [message, formAction] = useFormState(createPost, undefined);
@@ -69,7 +70,7 @@ export default function TextEditor({
     if (message === false) {
       alert('오류가 발생하였습니다. 다시 시도해주세요.');
     } else if (message === true) {
-      redirect('/post/share');
+      router.push('/post/share');
     }
   }, [message]);
 
