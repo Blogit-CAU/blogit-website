@@ -66,6 +66,7 @@ export default function TextEditor({
 
   function handleDownload() {
     // Create a Blob object representing the file content
+    //text 마지막에 주제 추천있음 파싱해야함 
     const fileContent = text; // Replace with your actual file content
     const blob = new Blob([fileContent], { type: 'text/plain' });
 
