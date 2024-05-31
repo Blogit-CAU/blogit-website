@@ -9,7 +9,7 @@ export async function createPost(_currentState: unknown, formData: FormData) {
     try {
       await postCreate(formData);
     } catch (err) {
-      throw new Error('오류가 발생했습니다. 다시 시도해주세요.');
+      return false;
     }
   }
 

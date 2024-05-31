@@ -64,6 +64,12 @@ export default function TextEditor({
     }
   }, []);
 
+  useEffect(() => {
+    if (message === false) {
+      alert('오류가 발생하였습니다. 다시 시도해주세요.');
+    }
+  }, [message])
+
   function handleDownload() {
     // Create a Blob object representing the file content
     const fileContent = text; // Replace with your actual file content

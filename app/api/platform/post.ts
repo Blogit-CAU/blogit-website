@@ -27,6 +27,7 @@ export const postCreate = async (formData: FormData) => {
   const token = await getToken();
 
   if (!token) {
+    console.error(formData);
     throw new Error('login is required');
   }
 
