@@ -1,6 +1,7 @@
 import { Button } from '@/components/Button';
 import MyPostList from '@/components/MyPost';
 import { Pagination } from '@/components/Pagination';
+import RecommTitle from '@/components/RecommTitle';
 import { Headline_01 } from '@/components/Typography';
 import Link from 'next/link';
 import React, { Suspense, useEffect } from 'react';
@@ -53,14 +54,7 @@ export default async function PostSharedPage() {
         </section>
       </div>
       <section className='flex flex-col gap-4'>
-        <h1>이런 글을 써보는 건 어때요?</h1>
-        //지피티에게 주제 받아오기
-        <ul className='flex gap-4'>
-          <li>theme1</li>
-          <li>theme2</li>
-          <li>theme3</li>
-          <li>theme4</li>
-        </ul>
+        <RecommTitle />
       </section>
 
       <Link href={'/'}>

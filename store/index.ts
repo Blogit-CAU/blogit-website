@@ -15,6 +15,8 @@ interface CommitState {
   remove: (commitId: string) => void;
   update: (commitId: string, updatedCommit: Commit) => void;
   clear: () => void;
+  recomText: string[];
+  setRecomText: (texts: string[]) => void;
 }
 
 export const useCommitStore = create<
@@ -38,5 +40,7 @@ export const useCommitStore = create<
         ),
       })),
     clear: () => set((state) => ({ commits: [] })),
+    recomText: [],
+    setRecomText: (texts) => set(() => ({ recomText: texts })),
   })),
 );
