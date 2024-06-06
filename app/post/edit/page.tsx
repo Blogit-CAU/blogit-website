@@ -5,19 +5,22 @@ import React, { Suspense } from 'react';
 export const runtime = 'edge';
 
 export default async function PostEditPage({
-  searchParams
+  searchParams,
 }: {
   searchParams: {
-    articleId?: number
-    readOnly?: string
-  }
+    articleId?: number;
+    readOnly?: string;
+  };
 }) {
   return (
     <div className='flex flex-col justify-center items-center h-full gap-4'>
       <Headline_00 className='text-[2rem]'>직접 수정하기</Headline_00>
       <TipForWriting />
       <div className='w-[70%] h-[50%]'>
-        <TextEditor articleId={searchParams.articleId} readOnly={searchParams.readOnly === undefined ? false : true} />
+        <TextEditor
+          articleId={searchParams.articleId}
+          readOnly={searchParams.readOnly === undefined ? false : true}
+        />
       </div>
     </div>
   );

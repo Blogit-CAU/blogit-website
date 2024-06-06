@@ -16,14 +16,16 @@ import '@uiw/react-markdown-preview/markdown.css';
 import { useFormState } from 'react-dom';
 import { createPost } from '@/app/actions/post';
 import { getPost } from '@/app/api/platform/post';
+import { redirect, useRouter } from 'next/navigation';
 
 export default function TextEditor({
   articleId,
-  readOnly
+  readOnly,
 }: {
-  articleId?: number
-  readOnly?: boolean
+  articleId?: number;
+  readOnly?: boolean;
 }) {
+  const router = useRouter();
   const commitStore = useCommitStore();
 
   const [message, formAction] = useFormState(createPost, undefined);
@@ -63,6 +65,14 @@ export default function TextEditor({
       fetchArticle();
     }
   }, []);
+
+  useEffect(() => {
+    if (message === false) {
+      alert('오류가 발생하였습니다. 다시 시도해주세요.');
+    } else if (message === true) {
+      router.push('/post/share');
+    }
+  }, [message]);
 
   function handleDownload() {
     // Create a Blob object representing the file content
@@ -106,7 +116,7 @@ export default function TextEditor({
         <MDEditor
           textareaProps={{
             name: 'content',
-            readOnly: readOnly
+            readOnly: readOnly,
           }}
           height={720}
           value={text}
