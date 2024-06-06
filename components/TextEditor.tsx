@@ -26,7 +26,7 @@ export default function TextEditor({
   readOnly?: boolean;
 }) {
   const router = useRouter();
-  const commitStore = useCommitStore();
+  const { commits, setRecomText, recomText } = useCommitStore();
 
   const [message, formAction] = useFormState(createPost, undefined);
 
@@ -38,9 +38,7 @@ export default function TextEditor({
     async function callGPT() {
       setIsLoading(true);
 
-      const { output } = await generateCompletion(
-        JSON.stringify(commitStore.commits),
-      );
+      const { output } = await generateCompletion(JSON.stringify(commits));
       for await (const delta of readStreamableValue(output)) {
         setText((prev) => `${prev}${delta}`);
       }
@@ -54,6 +52,25 @@ export default function TextEditor({
         const article = await getPost(articleId);
         setTitle(article.title);
         setText(article.content);
+
+        //여기 text 마지막에 ₩₩₩로 구분된 주제 추천있음 -> 여기서 제외시키고 share page로 가져와야함
+        const regex = /₩₩₩([\s\S]*)₩₩₩/;
+        const match = article.content.match(regex);
+        let topicsText = '';
+        if (match && match.length > 1) {
+          topicsText = match[1];
+        }
+
+        const jsonStr = topicsText.replace(/;/g, ',');
+        //const jsonString =
+        //  '{"주제1":"Jekyll을 이용한 블로그 구축 방법", "주제2":"Markdown을 사용한 문서 작성 팁", "주제3":"GitHub Pages로 프로젝트 문서 호스팅하기"}';
+
+        //const jsonObject = JSON.parse(jsonString);
+        const jsonObject = JSON.parse(jsonStr);
+        const topicsArray: string[] = Object.values(jsonObject);
+
+        setRecomText(topicsArray);
+        //console.log(topicsArray);
       }
 
       setIsLoading(false);
@@ -76,6 +93,7 @@ export default function TextEditor({
 
   function handleDownload() {
     // Create a Blob object representing the file content
+    //text 마지막에 주제 추천있음 파싱해야함
     const fileContent = text; // Replace with your actual file content
     const blob = new Blob([fileContent], { type: 'text/plain' });
 
