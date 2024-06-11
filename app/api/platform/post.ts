@@ -30,12 +30,12 @@ export const postCreate = async (formData: FormData) => {
     console.error(formData);
     throw new Error('login is required');
   }
-  
+
   const payload = JSON.stringify({
     title: formData.get('title'),
     content: formData.get('content'),
-  })
-  
+  });
+
   // Edge 런타임 환경에서는 fetch() POST 요청이 GET으로 들어가는 것 같아서 axios로 변경
   const res = await axios.post(
     `${process.env.PLATFORM_BASE_URL!}/api/articles?userId=${token.id}`,
@@ -45,7 +45,7 @@ export const postCreate = async (formData: FormData) => {
       headers: {
         'Content-type': 'application/json',
         Authorization: `Bearer ${token.token}`,
-      }
+      },
     },
   );
 

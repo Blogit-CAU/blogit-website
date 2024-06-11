@@ -11,7 +11,7 @@ export default function RecommTitle() {
         {recomText.map((each, index) => {
           return (
             <li>
-              {index+1}: {each}
+              {index + 1}: {each}
             </li>
           );
         })}
