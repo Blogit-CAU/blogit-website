@@ -40,7 +40,8 @@ export default function TextEditor({
     async function callGPT() {
       setIsLoading(true);
 
-      const { output } = await generateCompletion(JSON.stringify(commits));
+      const prompt = await fetch('/sysprompt.txt').then((res) => res.text());
+      const { output } = await generateCompletion(JSON.stringify(commits), prompt);
 
       let accumulatedText = '';
       let afterSeparator = false;
@@ -89,7 +90,7 @@ export default function TextEditor({
   }, []);
 
   async function handleRecom() {
-    console.log('separatedText:', separatedText);
+    process.env.NODE_ENV !== 'production' && console.log('separatedText:', separatedText);
     //여기 text 마지막에 ₩₩₩로 구분된 주제 추천있음 -> 여기서 제외시키고 share page로 가져와야함
     const regex = /₩₩₩([\s\S]*)₩₩₩/;
     const match = separatedText.match(regex);
@@ -99,7 +100,7 @@ export default function TextEditor({
     }
     //json 형식으로 만들기
     const jsonStr = topicsText.replace(/;/g, ',');
-    console.log('jsonSTr: ', jsonStr);
+    process.env.NODE_ENV !== 'production' && console.log('jsonSTr: ', jsonStr);
 
     //임시 데이터
     //const jsonString =
@@ -110,7 +111,7 @@ export default function TextEditor({
     const topicsArray: string[] = Object.values(jsonObject);
 
     setRecomText(topicsArray);
-    console.log(topicsArray);
+    process.env.NODE_ENV !== 'production' && console.log(topicsArray);
   }
 
   useEffect(() => {
@@ -128,19 +129,15 @@ export default function TextEditor({
   }, [message]);
 
   function handleDownload() {
-    // Create a Blob object representing the file content
-    const fileContent = text; // Replace with your actual file content
+    const fileContent = text;
     const blob = new Blob([fileContent], { type: 'text/plain' });
 
-    // Create a link element
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = `${title}.md`; // Set the file name
+    link.download = `${title}.md`;
 
-    // Programmatically click the link to trigger the download
     link.click();
 
-    // Clean up the URL object
     URL.revokeObjectURL(link.href);
   }
 

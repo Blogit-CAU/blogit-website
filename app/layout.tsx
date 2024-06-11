@@ -3,6 +3,9 @@ import type { Metadata } from 'next';
 import '@/styles/globals.css';
 import Image from 'next/image';
 import Link from 'next/link';
+import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
+
 import { Headline_01, Headline_02, Subtitle_02 } from '@/components/Typography';
 import { getToken, hasToken } from './actions/auth';
 
@@ -19,6 +22,8 @@ export default async function RootLayout({
   return (
     <html lang='en'>
       <body>
+        <Analytics />
+        <SpeedInsights />
         <header className='bg-white'>
           <nav
             className='mx-auto flex max-w-7xl items-center   p-6 px-8'
