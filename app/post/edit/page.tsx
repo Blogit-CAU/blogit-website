@@ -2,8 +2,6 @@ import TextEditor from '@/components/TextEditor';
 import { Headline_00 } from '@/components/Typography';
 import React, { Suspense } from 'react';
 
-export const runtime = 'edge';
-
 export default async function PostEditPage({
   searchParams,
 }: {
