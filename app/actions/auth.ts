@@ -69,11 +69,21 @@ export async function authenticate(_currentState: unknown, formData: FormData) {
 
 export async function signup(_currentState: unknown, formData: FormData) {
   let res;
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,15}$/;
+
+  const _ = formData.get('email');
+  const __ = formData.get('memberName');
+  const password = formData.get('password');
+
+  if (!password?.toString().match(passwordRegex)) {
+    return 'PASSWORD_INVALID';
+  }
+
   try {
     res = await signUp(formData);
   } catch (err: any) {
-    return false;
+    return 'ERROR';
   }
 
-  return true;
+  return 'SUCCESS';
 }
