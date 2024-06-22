@@ -9,10 +9,7 @@ import { useRouter } from 'next/navigation';
 import { getModerations } from '@/app/api/openai';
 import { papagoTranslation } from '@/app/api/naver-cloud';
 import { BodyMedium, Headline_02, LabelLarge } from './Typography';
-import {
-  Description,
-  Dialog,
-} from '@headlessui/react';
+import { Description, Dialog } from '@headlessui/react';
 
 export function CommitDetailList() {
   const maxLength = 5000;

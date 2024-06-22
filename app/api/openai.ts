@@ -18,32 +18,32 @@ export interface Moderation {
     sexual: boolean;
     hate: boolean;
     harassment: boolean;
-    "self-harm": boolean;
-    "sexual/minors": boolean;
-    "hate/threatening": boolean;
-    "violence/graphic": boolean;
-    "self-harm/intent": boolean;
-    "self-harm/instructions": boolean;
-    "harassment/threatening": boolean;
+    'self-harm': boolean;
+    'sexual/minors': boolean;
+    'hate/threatening': boolean;
+    'violence/graphic': boolean;
+    'self-harm/intent': boolean;
+    'self-harm/instructions': boolean;
+    'harassment/threatening': boolean;
     violence: boolean;
   };
   category_scores: {
     sexual: number;
     hate: number;
     harassment: number;
-    "self-harm": number;
-    "sexual/minors": number;
-    "hate/threatening": number;
-    "violence/graphic": number;
-    "self-harm/intent": number;
-    "self-harm/instructions": number;
-    "harassment/threatening": number;
+    'self-harm': number;
+    'sexual/minors': number;
+    'hate/threatening': number;
+    'violence/graphic': number;
+    'self-harm/intent': number;
+    'self-harm/instructions': number;
+    'harassment/threatening': number;
     violence: number;
-  }
+  };
 }
 
 export async function getModerations(text: string[]) {
-  return await fetch(`${OPENAI_URL}/moderations`, {
+  return (await fetch(`${OPENAI_URL}/moderations`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -52,7 +52,7 @@ export async function getModerations(text: string[]) {
     body: JSON.stringify({
       input: text,
     }),
-  }).then((res) => res.json()) as ModerationResponse;
+  }).then((res) => res.json())) as ModerationResponse;
 }
 
 export async function generateCompletion(input: string, prompt: string) {
@@ -69,7 +69,7 @@ export async function generateCompletion(input: string, prompt: string) {
       messages: [
         {
           role: 'assistant',
-          content: prompt
+          content: prompt,
         },
         {
           role: 'user',

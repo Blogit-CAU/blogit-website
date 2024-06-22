@@ -43,8 +43,16 @@ export default function SignupPage() {
         className='w-96 block rounded-lg border-none bg-black/5 py-1.5 px-3 text-sm/6 text-black focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-black/25'
       />
 
-      {state === 'ERROR' && <LabelMedium className='text-red-500'>{'이메일 또는 아이디가 중복입니다. 다시 시도해주세요.'}</LabelMedium>}
-      {state === 'PASSWORD_INVALID' && <LabelMedium className='text-red-500'>{'비밀번호를 영문, 숫자, 특수문자 포함 8자 이상으로 설정해주세요.'}</LabelMedium>}
+      {state === 'ERROR' && (
+        <LabelMedium className='text-red-500'>
+          {'이메일 또는 아이디가 중복입니다. 다시 시도해주세요.'}
+        </LabelMedium>
+      )}
+      {state === 'PASSWORD_INVALID' && (
+        <LabelMedium className='text-red-500'>
+          {'비밀번호를 영문, 숫자, 특수문자 포함 8자 이상으로 설정해주세요.'}
+        </LabelMedium>
+      )}
 
       <Button
         className='w-64 h-10'

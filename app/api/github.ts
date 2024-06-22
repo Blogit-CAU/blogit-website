@@ -89,3 +89,27 @@ export async function getCommit(
 
   return res;
 }
+
+export async function searchUser(keyword: string) {
+  const pageSize = 5;
+
+  const res = await octokit.request('GET /search/users', {
+    headers: {
+      accept: 'application/vnd.github+json',
+    },
+    q: keyword,
+    per_page: pageSize,
+  });
+
+  return res;
+}
+
+export async function getUser(username: string) {
+  const res = await octokit.request(`GET /users/${username}`, {
+    headers: {
+      accept: 'application/vnd.github+json',
+    },
+  });
+
+  return res;
+}

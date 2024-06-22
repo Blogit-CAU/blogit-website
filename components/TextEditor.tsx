@@ -41,7 +41,10 @@ export default function TextEditor({
       setIsLoading(true);
 
       const prompt = await fetch('/sysprompt.txt').then((res) => res.text());
-      const { output } = await generateCompletion(JSON.stringify(commits), prompt);
+      const { output } = await generateCompletion(
+        JSON.stringify(commits),
+        prompt,
+      );
 
       let accumulatedText = '';
       let afterSeparator = false;
@@ -90,7 +93,8 @@ export default function TextEditor({
   }, []);
 
   async function handleRecom() {
-    process.env.NODE_ENV !== 'production' && console.log('separatedText:', separatedText);
+    process.env.NODE_ENV !== 'production' &&
+      console.log('separatedText:', separatedText);
     //여기 text 마지막에 ₩₩₩로 구분된 주제 추천있음 -> 여기서 제외시키고 share page로 가져와야함
     const regex = /₩₩₩([\s\S]*)₩₩₩/;
     const match = separatedText.match(regex);

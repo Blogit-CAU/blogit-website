@@ -3,19 +3,66 @@
 import { useCommitStore } from '@/store';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
+import { useCallback, useRef, useState } from 'react';
+import { getUser, searchUser } from './api/github';
+
+import { Endpoints } from '@octokit/types';
+import _ from 'lodash';
+import { LabelLarge, LabelMedium } from '@/components/Typography';
 
 const Home = () => {
   const router = useRouter();
-  //const [gitLink, setGitLink] = useState<string>('');
   const linkInput = useRef<HTMLInputElement>(null);
   const commitStore = useCommitStore();
 
-  function handleSubmit() {
+  const [query, setQuery] = useState<string>('');
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [queryResults, setQueryResults] = useState<
+    Endpoints['GET /search/users']['response']['data']['items']
+  >([]);
+
+  // TODO Remove from React 19
+  const debouncedSearch = useCallback(
+    _.debounce(async (searchQuery: string) => {
+      console.log('Searching for:', searchQuery);
+      const res = await searchUser(searchQuery);
+      setQueryResults(res.data.items);
+    }, 300),
+    [],
+  );
+
+  function handleItemClick(
+    each: Endpoints['GET /search/users']['response']['data']['items'][0],
+  ) {
+    linkInput.current?.focus();
+    setIsSearching(false);
+    setQuery(each.login);
+  }
+
+  async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const next = e.target.value;
+
+    setQuery(next);
+
+    if (next.length > 0) {
+      debouncedSearch(next);
+      setIsSearching(true);
+    } else {
+      setIsSearching(false);
+    }
+  }
+
+  async function handleSubmit() {
     commitStore.clear();
-    const next = linkInput.current!.value;
-    //setGitLink(next);
-    router.push(`/post?githubId=${next}`);
+
+    try {
+      await getUser(query);
+    } catch (e) {
+      alert('잘못된 유저 이름입니다. 다시 입력해주세요.');
+      return;
+    }
+
+    router.push(`/post?githubId=${query}`);
   }
 
   return (
@@ -30,15 +77,40 @@ const Home = () => {
         ></Image>
       </div>
       <div className='w-full flex justify-center gap-2'>
-        <input
-          type='text'
-          placeholder='Github ID를 입력해주세요!'
-          ref={linkInput}
-          className='w-[30%] border border-gray-400 rounded-xl p-3 focus:outline-0 placeholder:pl-2'
-        ></input>
+        <div className='w-[50%] relative'>
+          {isSearching && (
+            <div className='w-full flex flex-col'>
+              {queryResults.map((each, index) => {
+                return (
+                  <div
+                    key={index}
+                    className='flex flex-row gap-2 items-center py-2 hover:bg-gray-300 cursor-pointer'
+                    onClick={(e) => handleItemClick(each)}
+                  >
+                    <Image
+                      width={64}
+                      height={64}
+                      src={each.avatar_url}
+                      alt='avatar'
+                      className='rounded-full ml-2'
+                    ></Image>
+                    <LabelLarge>{each.login}</LabelLarge>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+          <input
+            type='text'
+            placeholder='Github ID를 입력해주세요!'
+            value={query}
+            onChange={handleChange}
+            className='w-full border border-gray-400 rounded-xl p-3 focus:outline-0 placeholder:pl-2'
+          ></input>
+        </div>
         <button
           onClick={handleSubmit}
-          className='w-12 border border-gray-400 rounded-xl'
+          className='w-12 h-12 border border-gray-400 rounded-xl mt-auto'
         >
           GO
         </button>
